@@ -1,9 +1,12 @@
-import { Box, Button, Modal, Typography } from "@material-ui/core";
+import { Box, Grid, Paper, Button, Modal, Typography } from "@material-ui/core";
+import Cart from "../../types/Cart";
 import "./CartInfo.css";
+import React from 'react';
 
 interface CartInfoProps {
     open: boolean;
     handleClose(event: any): void
+    cart: Cart;
 }
 
 const style = {
@@ -19,6 +22,30 @@ const style = {
   };
 
 const CartInfo: React.FC<CartInfoProps>  = (props) => {
+    var lineItems = [] as any[];
+    if (props.cart !== undefined && props.cart.lineItems !== undefined) {
+        props.cart.lineItems.forEach( (item) => {
+            lineItems.push(
+                <React.Fragment>
+                    <Grid item lg={2}>
+                        <Paper className="smallImage">
+                          <img src={item.sku.smallImageUrl} alt={item.product.name} />
+                        </Paper>
+                    </Grid>
+                    <Grid item lg={10} container>
+                        <Grid item lg={8}>
+                            <Typography className="productNameCart" >
+                            {item.product.name}
+                            </Typography>
+                        </Grid>
+                        <Grid item lg={4}>
+                            {item.quantity} x <Typography className="dollars" >{item.unitPrice}</Typography>
+                        </Grid>
+                    </Grid>
+                </React.Fragment>
+            );
+        });
+    }
     return (
         <Modal
             open={props.open}
@@ -28,8 +55,13 @@ const CartInfo: React.FC<CartInfoProps>  = (props) => {
         >
             <Box sx={style}>
                 <Typography id="modal-modal-description">
-                    Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+                    Shopping Cart:
                 </Typography>
+                    <div className="productPreviewCart">
+                        <Grid container className="productGridCart" spacing={2}>
+                            {lineItems}
+                        </Grid>
+                    </div>
                 <Button className="cartButton" variant="contained" onClick={props.handleClose}>
                 Close
                 </Button>
