@@ -31,7 +31,7 @@ class Cart {
         var newLineItems: [LineItem] = [] as any;
 
         this.lineItems.forEach((item) => {
-            if(item.sku.id === sku.id){
+            if(item.sku.id !== sku.id){
                 newLineItems.push(item);
             }
         });
