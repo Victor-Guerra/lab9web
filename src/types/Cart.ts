@@ -6,14 +6,25 @@ class Cart {
     lineItems: [LineItem] = [] as any;
 
     addItem(product: Product, sku: Sku, quantity: number, price: number) : void {
-        const lineItem = {} as LineItem;
-        lineItem.product = product;
-        lineItem.sku = sku;
-        lineItem.quantity = quantity;
-        lineItem.unitPrice = price;
-        lineItem.totalPrice = quantity * price;
+        var existingSku = false;
+        this.lineItems.forEach( (line) => {
+            if (line.sku.id == sku.id) {
+                line.quantity += quantity;
+                line.totalPrice = line.quantity * line.unitPrice;
+                existingSku = true;
+            }
+        });
 
-        this.lineItems.push(lineItem);
+        if (!existingSku) {
+            const lineItem = {} as LineItem;
+            lineItem.product = product;
+            lineItem.sku = sku;
+            lineItem.quantity = quantity;
+            lineItem.unitPrice = price;
+            lineItem.totalPrice = quantity * price;
+
+            this.lineItems.push(lineItem);
+        }
     }
 
     getNumberOfItems() {
