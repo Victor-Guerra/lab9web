@@ -6,6 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import Routes from "./components/Routes";
 import CartModal from "./containers/CartModal/CartModal";
 import Cart from "../src/types/Cart";
+import Sku from "../src/types/Sku";
 import Helper from "../src/tools/SessionStorageHelper";
 
 interface AppState {
@@ -34,7 +35,7 @@ class App extends React.Component<{}, AppState> {
         <BrowserRouter>
           <Header openCart={this.handleOpenCart} />
           <Routes openCart={this.handleOpenCart}/>
-          <CartModal isCartVisible={this.state.cartOpen} closeCart={this.handleCloseCart} cart={this.state.cart}/>
+          <CartModal isCartVisible={this.state.cartOpen} closeCart={this.handleCloseCart} removeFromCart={this.removeFromCart} cart={this.state.cart}/>
         </BrowserRouter>
       </React.Fragment>
     )
@@ -44,6 +45,12 @@ class App extends React.Component<{}, AppState> {
     this.setState({
       cart: Helper.getCart()
     });    
+  }
+  
+  removeFromCart = (event: any, sku: Sku) => {
+    this.state.cart.removeItem(sku);
+    Helper.updateCart(this.state.cart);
+    this.setState({ cart: Helper.getCart() });
   }
 
   handleCloseCart = (event: any) => {

@@ -8,7 +8,7 @@ class Cart {
     addItem(product: Product, sku: Sku, quantity: number, price: number) : void {
         var existingSku = false;
         this.lineItems.forEach( (line) => {
-            if (line.sku.id == sku.id) {
+            if (line.sku.id === sku.id) {
                 line.quantity += quantity;
                 line.totalPrice = line.quantity * line.unitPrice;
                 existingSku = true;
@@ -25,6 +25,18 @@ class Cart {
 
             this.lineItems.push(lineItem);
         }
+    }
+    
+    removeItem(sku: Sku): void {
+        var newLineItems: [LineItem] = [] as any;
+
+        this.lineItems.forEach((item) => {
+            if(item.sku.id === sku.id){
+                newLineItems.push(item);
+            }
+        });
+        
+        this.lineItems = newLineItems;
     }
 
     getNumberOfItems() {

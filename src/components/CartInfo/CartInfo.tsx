@@ -1,11 +1,13 @@
 import { Box, Grid, Paper, Button, Modal, Typography } from "@material-ui/core";
 import Cart from "../../types/Cart";
+import Sku from "../../types/Sku";
 import "./CartInfo.css";
 import React from 'react';
 
 interface CartInfoProps {
     open: boolean;
-    handleClose(event: any): void
+    handleClose(event: any): void;
+    handleRemove(event: any, sku: Sku): void;
     cart: Cart;
 }
 
@@ -14,7 +16,7 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: 700,
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
@@ -38,8 +40,16 @@ const CartInfo: React.FC<CartInfoProps>  = (props) => {
                             {item.product.name}
                             </Typography>
                         </Grid>
-                        <Grid item lg={4}>
+                        <Grid item lg={2}>
                             {item.quantity} x <Typography className="dollars" >{item.unitPrice}</Typography>
+                        </Grid>
+                        <Grid item lg={2}>
+                            <Button 
+                                className="cartButton" 
+                                variant="contained" 
+                                onClick={(event) => props.handleRemove(event, item.sku)}>
+                                Remove
+                            </Button>
                         </Grid>
                     </Grid>
                 </React.Fragment>
